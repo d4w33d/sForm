@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+  <!-- ///////////////////////////////////////////////////////////////////// -->
+
+  <Debug>false</Debug>
+
+  <!-- ///////////////////////////////////////////////////////////////////// -->
+
+  <Redirections>
+
+    <AfterError>form-example.php</AfterError>
+    <AfterSuccess>success.html</AfterSuccess>
+
+  </Redirections>
+
+  <!-- ///////////////////////////////////////////////////////////////////// -->
+
+  <Email>
+
+    <Enabled>true</Enabled>
+
+    <!--
+
+      Sender name and email address
+
+    -->
+
+    <From>
+      <Name>Company Name</Name>
+      <Address>no-reply@domain.tld</Address>
+    </From>
+
+    <!--
+
+      Reply-to email address
+
+    -->
+
+    <ReplyTo>
+      <Name>Company Name</Name>
+      <Address>no-reply@domain.tld</Address>
+    </ReplyTo>
+
+    <!--
+
+      Recipient(s) email address(es)
+      You can create multiple entries for To, Cc and Bcc.
+
+    -->
+
+    <To>
+      <Name>You</Name>
+      <Address>you@domain.tld</Address>
+    </To>
+
+    <Cc>
+      <Name>Some Guy</Name>
+      <Address>some.guy@domain.tld</Address>
+    </Cc>
+
+    <Bcc>
+      <Name>Some Hidden Guy</Name>
+      <Address>some.hidden.guy@domain.tld</Address>
+    </Bcc>
+
+    <!--
+
+      Email subject
+
+    -->
+
+    <Subject>Form submitted</Subject>
+
+    <!--
+
+      Email template (HTML).
+      Available vars are:
+
+        - {{ _date }}            Date and time of form validation (YYYY-MM-DD hh:mm:ss)
+        - {{ _ip }}              IP address of user
+        - {{ _host }}            Resolved hostname based on the user IP
+
+        - {{ _fields }}          Display all fields and values as an HTML table
+
+        - {{ your_field_name }}  Display custom field value
+
+    -->
+
+    <Message><![CDATA[
+
+      <p>A user submitted something:</p>
+
+      <hr>
+
+      {{ _fields }}
+
+      <hr>
+
+      <p>Information:</p>
+
+      <ul>
+        <li><strong>Validation date:</strong> {{ _date }}</li>
+        <li><strong>IP address:</strong> {{ _ip }}</li>
+        <li><strong>Hostname:</strong> {{ _host }}</li>
+      </ul>
+
+    ]]></Message>
+
+  </Email>
+
+  <!-- ///////////////////////////////////////////////////////////////////// -->
+
+  <Log>
+
+    <Enabled>true</Enabled>
+
+    <!--
+
+      File path where log is stored.
+      The generated file is a text file, with one JSON entry per line.
+
+      Special vars:
+        - {{Y}} year (YYYY)
+        - {{m}} month (MM)
+        - {{d}} day (DD)
+
+    -->
+
+    <File>data.log</File>
+
+  </Log>
+
+  <!-- ///////////////////////////////////////////////////////////////////// -->
+
+  <Fields>
+
+    <!--
+
+    Types:
+      - string
+      - text
+      - boolean
+      - integer
+      - float
+
+    Validation rules:
+      - Mandatory          "true" or "false" (default "false")
+      - MinLength          Integer
+      - MaxLength          Integer
+      - RegExp             Regular expression - Cf. http://php.net/manual/fr/pcre.pattern.php
+      - AllowedValues      Array of elements "AllowedValue" with expected value
+      - GreatThan          Number great than...
+      - GreatThanOrEquals  Number great than or equals to...
+      - LessThan           Number less than...
+      - LessThanOrEquals   Number less than or equals to...
+
+    Special tags:
+      - TrueLabel          Label shown in email and log file when boolean's value is TRUE (default "Yes")
+      - FalseLabel         Label shown in email and log file when boolean's value is FALSE (default "No")
+      - HttpMethod         Retrieve the value from POST or GET (default "POST")
+
+    -->
+
+
+    <Field>
+      <Name>firstname</Name>
+      <Label>First name</Label>
+      <Type>string</Type>
+      <Validation>
+        <Mandatory>true</Mandatory>
+        <AllowedValues>
+          <AllowedValue>John</AllowedValue>
+          <AllowedValue>Jane</AllowedValue>
+        </AllowedValues>
+      </Validation>
+    </Field>
+
+    <Field>
+      <Name>lastname</Name>
+      <Label>Last name</Label>
+      <Type>string</Type>
+      <Validation>
+        <Mandatory>true</Mandatory>
+      </Validation>
+    </Field>
+
+    <Field>
+      <Name>birthday</Name>
+      <Label>Birthday</Label>
+      <Type>string</Type>
+      <Validation>
+        <RegExp>^[0-9]{4}-[0-9]{2}-[0-9]{2}$</RegExp> <!-- YYYY-MM-DD -->
+      </Validation>
+    </Field>
+
+    <Field>
+      <Name>optin</Name>
+      <Label>Register to newsletter</Label>
+      <Type>boolean</Type>
+      <TrueLabel>Absolutely</TrueLabel>
+      <FalseLabel>Hum... No!</FalseLabel>
+    </Field>
+
+    <Field>
+      <Name>price</Name>
+      <Label>Price</Label>
+      <Type>float</Type>
+      <Validation>
+        <GreatThanOrEquals>10</GreatThanOrEquals>
+        <LessThanOrEquals>999.99</LessThanOrEquals>
+      </Validation>
+    </Field>
+
+  </Fields>
+
+  <!-- ///////////////////////////////////////////////////////////////////// -->
+
+</Configuration>
