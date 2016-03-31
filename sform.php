@@ -36,6 +36,22 @@ class sForm
         return self::$instance;
     }
 
+    public static function errors()
+    {
+        $inst = self::getInstance();
+
+        if (!($err = $inst->getSessionData('errors'))) {
+            return;
+        }
+
+        echo '<ul class="errors">';
+        foreach ($err as $key => $msg) {
+            echo '<li><strong>' . strtoupper($inst->esc($key)) . '</strong> ('
+                . $inst->esc($msg) . ')</li>';
+        }
+        echo '</ul>';
+    }
+
     public static function getError($fieldName)
     {
         return self::getInstance()
@@ -241,7 +257,7 @@ class sForm
             $this->log($values, $sysVars);
         }
 
-        // $this->redirect($this->cfg('Redirections/AfterSuccess'));
+        $this->redirect($this->cfg('Redirections/AfterSuccess'));
     }
 
     private function sendEmail(array $values, array $sysVars, array $labels)
@@ -251,13 +267,18 @@ class sForm
         // From and recipients
 
         foreach (array('To', 'Cc', 'Bcc') as $k) {
+            $var = strtolower($k);
+            $$var = array();
+
+            if (!array_key_exists($k, $cfg)) {
+                continue;
+            }
+
             $items = $cfg[$k];
             if (array_key_exists('Address', $items)) {
                 $items = array($items);
             }
 
-            $var = strtolower($k);
-            $$var = [];
             foreach ($items as $item) {
                 array_push($$var, $item['Name'] . ' <' . $item['Address'] . '>');
             }
